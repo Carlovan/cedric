@@ -8,7 +8,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin, GPIO.OUT)
 GPIO.setwarnings(False)
 
-mm = Motor(pin)
+mm = Motor(pin, True)
 
 try:
 	while True:
