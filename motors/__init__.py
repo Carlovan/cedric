@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from .motor import Motor
-import zerorpc
 
 class MotorController:
 	def __init__(self, pin_dx, pin_sx):
@@ -24,8 +23,3 @@ class MotorController:
 				mdx_speed += offset
 			self.mdx.set_speed(mdx_speed)
 			self.msx.set_speed(msx_speed)
-
-if __name__ == '__main__':
-	server = zerorpc.Server(MotorController(4, 5))
-	server.bind('tcp://127.0.0.1:22000')
-	server.run()
