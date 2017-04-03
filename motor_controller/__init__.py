@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from motor import Motor
+from .motor import Motor
 import zerorpc
 
 class MotorController:
 	def __init__(self, pin_dx, pin_sx):
-		self.mdx = Motor(pin_dx, False)
-		self.msx = Motor(pin_sx, True)
+		self.mdx = Motor(pin_dx, True)
+		self.msx = Motor(pin_sx, False)
 
-	def go(self, speed, steer):
+	def walk(self, speed, steer):
 		if -100 <= speed <= 100 and -100 <= steer <= 100:
 			msx_speed = speed + steer
 			mdx_speed = speed - steer
@@ -22,6 +22,8 @@ class MotorController:
 				offset = tmp2 + 100
 				msx_speed += offset
 				mdx_speed += offset
+			self.mdx.SetSpeed(mdx_speed)
+			self.msx.SetSpeed(msx_speed)
 
 server = zerorpc.Server(MotorController(4, 5))
 server.bind('tcp://127.0.0.1:22000')

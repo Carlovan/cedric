@@ -26,13 +26,7 @@ class Motor:
 	def SetSpeed(self, speed):
 		# Sets the speed of the motor.
 		# The parameter must be between -100.0 and 100.0 (included)
-
+		assert(-100 <= speed <= 100)
 		speed *= self._mult
-		
-		if not -100.0 <= speed <= 100.0:
-			raise ValueError('Must be -100.0 <= speed <= 100')
-
-		dc = scale(speed, -100, 100, 5, 10)
+		dc = scale(speed, -100, 100, 4.7954, 9.7954)
 		self.pwmHandler.ChangeDutyCycle(dc)
-		if speed == 0:
-			self.pwmHandler.ChangeDutyCycle(0) # The motor is REALLY stopped
