@@ -8,7 +8,7 @@ class MotorController:
 		self.msx = Motor(pin_sx, False)
 
 	def walk(self, speed, steer):
-		if -100 <= speed <= 100 and -100 <= steer <= 100:
+		if type(speed) is int and type(steer) is int and -100 <= speed <= 100 and -100 <= steer <= 100:
 			msx_speed = speed + steer
 			mdx_speed = speed - steer
 			maxSpeed = max(msx_speed, mdx_speed)
@@ -23,3 +23,5 @@ class MotorController:
 				mdx_speed += offset
 			self.mdx.set_speed(mdx_speed)
 			self.msx.set_speed(msx_speed)
+		else:
+			print('[W] Invalid parameter!')
