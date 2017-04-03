@@ -12,18 +12,18 @@ class MotorController:
 		if -100 <= speed <= 100 and -100 <= steer <= 100:
 			msx_speed = speed + steer
 			mdx_speed = speed - steer
-			tmp1 = max(msx_speed, mdx_speed)
-			tmp2 = min(msx_speed, mdx_speed)
-			if tmp1 > 100:
-				offset = tmp1 - 100
+			maxSpeed = max(msx_speed, mdx_speed)
+			minSpeed = min(msx_speed, mdx_speed)
+			if maxSpeed > 100:
+				offset = maxSpeed - 100
 				msx_speed -= offset
 				mdx_speed -= offset
-			if tmp2 < -100:
-				offset = tmp2 + 100
+			if minSpeed < -100:
+				offset = minSpeed + 100
 				msx_speed += offset
 				mdx_speed += offset
-			self.mdx.SetSpeed(mdx_speed)
-			self.msx.SetSpeed(msx_speed)
+			self.mdx.set_speed(mdx_speed)
+			self.msx.set_speed(msx_speed)
 
 server = zerorpc.Server(MotorController(4, 5))
 server.bind('tcp://127.0.0.1:22000')

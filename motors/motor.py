@@ -23,7 +23,7 @@ class Motor:
 		# Class destructor
 		self.pwmHandler.stop()
 
-	def SetSpeed(self, speed):
+	def set_speed(self, speed):
 		# Sets the speed of the motor.
 		# The parameter must be between -100.0 and 100.0 (included)
 		assert(-100 <= speed <= 100)
