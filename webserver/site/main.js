@@ -7,25 +7,25 @@ function runLoop(){
 	window.requestAnimationFrame(runLoop);
 
 	var gamepads = navigator.getGamepads();
-	if(gamepads.length == 0)
+	var sleft = '50%';
+	var stop = '50%';
+	var ssize = '50px';
+	var sbgcolor = '#c0392b';
+
+	if(gamepads.length == 0 || !gamepads[0]){
 		stateDiv.innerHTML = 'No gamepad connected';
+	}
 	else{
 		var gp = gamepads[0];
 
 		var ax0 = gp.axes[2];
 		var ax1 = gp.axes[3];
-		var sleft = `calc(50% + ${ax0 * 380}px)`;
-		var stop = `calc(50% + ${ax1 * 380}px)`;
+		sleft = `calc(50% + ${ax0 * 380}px)`;
+		stop = `calc(50% + ${ax1 * 380}px)`;
 
 		var bA = gp.buttons[6];
-		var ssize = `${bA.pressed ? 70 : 50}px`;
-		var sbgcolor = bA.pressed ? '#2ecc71' : '#c0392b';
-
-		stateDiv.style.left = sleft;
-		stateDiv.style.top  = stop;
-		stateDiv.style.height = ssize;
-		stateDiv.style.width = ssize;
-		stateDiv.style.backgroundColor = sbgcolor;
+		ssize = `${bA.pressed ? 70 : ssize}px`;
+		sbgcolor = bA.pressed ? '#2ecc71' : sbgcolor;
 
 		var data = {
 			'x': ax0,
@@ -35,5 +35,10 @@ function runLoop(){
 		if(ws.readyState == ws.OPEN)
 			ws.send(JSON.stringify(data));
 	}
+	stateDiv.style.left = sleft;
+	stateDiv.style.top  = stop;
+	stateDiv.style.height = ssize;
+	stateDiv.style.width = ssize;
+	stateDiv.style.backgroundColor = sbgcolor;
 }
 window.requestAnimationFrame(runLoop);
