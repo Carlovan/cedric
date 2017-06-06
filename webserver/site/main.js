@@ -1,4 +1,4 @@
-var serverIP = '192.168.1.190';
+var serverIP = location.host;
 
 var ws = new WebSocket(`ws://${serverIP}:8080`);
 
