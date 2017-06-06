@@ -5,8 +5,9 @@ def scale(value, oldL, oldR, newL, newR):
 
 class Motor:
 	_mult = 1
-	def __init__(self, pin, rev=False):
+	def __init__(self, pin, rev=False, offset=0):
 		# Class constructor
+		# Offset is used to calibrate the motor
 
 		# Make sure the pin is in output mode
 		GPIO.cleanup(pin)
@@ -16,6 +17,7 @@ class Motor:
 			self._mult = -1
 
 		self.pin = pin
+		self.offset = offset
 		self.pwmHandler = GPIO.PWM(pin, 50)
 		self.pwmHandler.start(0)
 
@@ -28,5 +30,7 @@ class Motor:
 		# The parameter must be between -100.0 and 100.0 (included)
 		assert(-100 <= speed <= 100)
 		speed *= self._mult
-		dc = scale(speed, -100, 100, 4.7954, 9.7954)
+		speed += self.offset
+		#dc = scale(speed, -100, 100, 4.7954, 9.7954)
+		dc = scale(speed, -100, 100, 5, 10)
 		self.pwmHandler.ChangeDutyCycle(dc)

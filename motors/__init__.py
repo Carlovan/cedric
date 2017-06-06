@@ -6,7 +6,7 @@ import zerorpc
 class MotorController:
 	def __init__(self, pin_dx, pin_sx):
 		self.mdx = Motor(pin_dx, True)
-		self.msx = Motor(pin_sx, False)
+		self.msx = Motor(pin_sx, False, 4)
 
 	def walk(self, speed, steer):
 		if -100 <= speed <= 100 and -100 <= steer <= 100:
