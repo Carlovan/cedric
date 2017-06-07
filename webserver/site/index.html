@@ -2,11 +2,18 @@
 <html>
 	<head>
 		<title>Cedric Controller</title>
+		<link rel='stylesheet' href='style.css'>
+		<script src='raphael-2.1.4.min.js'></script>
+		<script src='justgage.js'></script>
+		<script src='analogstick.js'></script>
 		<script src='main.js'></script>
 	</head>
 	<body>
-		<div id='container' style='width: 800px; height: 800px; border: 1px solid #444; border-radius: 50%; position: absolute;'>
-			<div id='stateDiv' style='height: 50px; width: 50px; border-radius: 50%; position: relative; transform: translate(-50%, -50%); transition: width .2s, height .2s, background-color .2s;'></div>
+		<div id='info'></div>
+		<div id='knobs'>
+			<div id='lknob_container' class='knob'></div>
+			<div id='rknob_container' class='knob'></div>
 		</div>
+		<div id='steer'></div>
 	</body>
 </html>

@@ -1,0 +1,11 @@
+#info {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+
+.knob {
+	width: 70px;
+	height: 70px;
+	display: inline-block;
+}
