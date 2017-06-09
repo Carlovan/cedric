@@ -4,8 +4,8 @@ from .motor import Motor
 
 class MotorController:
 	def __init__(self, pin_dx, pin_sx):
-		self.mdx = Motor(pin_dx, True)
-		self.msx = Motor(pin_sx, False, 4)
+		self.mdx = Motor(pin_dx, True, -4)
+		self.msx = Motor(pin_sx, False)
 
 	def walk(self, speed, steer):
 		speed *= 100
