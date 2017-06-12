@@ -65,9 +65,23 @@ class NeuralNetwork:
 		tmp_w = self.weights.copy()
 		for i in range(len(tmp_w)):
 			tmp_w[i][:, 0] = 0 # Zero the first column (bias weight)
-		print(tmp_w)
+		#print(tmp_w)
 		for i in range(len(D)):
 			D[i] += norm_rate * tmp_w[i]
 			D[i] /= len(input_vals)
 		for i in range(len(D)):
 			self.weights[i] -= learning_rate * D[i]
+
+	def get_error(self, input_val, output_val):
+		# Return the mean square error
+		assert(type(input_val) is np.matrix)
+		assert(type(output_val) is np.matrix)
+		output = self.feed(input_val)
+		return np.sqrt(np.mean(np.power(output - output_val, 2)))
+
+	def get_errors(self, input_vals, output_vals):
+		# Return the mean of the errors for every test case
+		total = 0
+		for testcase in zip(input_vals, output_vals):
+			total += self.get_error(testcase[0], testcase[1])
+		return total / len(input_vals)
