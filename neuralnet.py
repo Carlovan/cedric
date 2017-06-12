@@ -26,7 +26,7 @@ class NeuralNetwork:
 		# Feeds the network with the given inputs and calculates the outputs
 		# If get_all is True return all the layers, not only the output
 		assert(type(input_val) is np.matrix)
-		curr_layer = np.matrix(input_val) # Create a new copy (not only reference)
+		curr_layer = input_val.copy() # Create a new copy (not only reference)
 		layers = [curr_layer]
 		for syn in self.weights:
 			curr_layer = add_bias(curr_layer)
@@ -51,7 +51,23 @@ class NeuralNetwork:
 		DELTA = [None] * len(self.weights)
 		for i in range(len(delta) - 1):
 			DELTA[i] = delta[i+1].dot(add_bias(layers[i]).T)
-		print('\n'.join([str(x.shape) for x in self.weights]))
-		print('-'*40)
-		print('\n'.join([str(x.shape) for x in DELTA]))
 		return DELTA
+	
+	def learn(self, input_vals, output_vals, learning_rate, norm_rate):
+		D = None
+		for i in range(len(input_vals)):
+			tmp = self._calculate_backprop(input_vals[i], output_vals[i])
+			if D is None:
+				D = tmp
+			else:
+				for j in range(len(D)):
+					D[j] += tmp[j]
+		tmp_w = self.weights.copy()
+		for i in range(len(tmp_w)):
+			tmp_w[i][:, 0] = 0 # Zero the first column (bias weight)
+		print(tmp_w)
+		for i in range(len(D)):
+			D[i] += norm_rate * tmp_w[i]
+			D[i] /= len(input_vals)
+		for i in range(len(D)):
+			self.weights[i] -= learning_rate * D[i]
