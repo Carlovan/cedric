@@ -2,7 +2,18 @@ window.onload = function() {
 	var serverIP = location.host;
 	var ws = new WebSocket(`ws://${serverIP}:8080`);
 
-	var data = {
+	ws.onmessage = function(event){
+		var data = JSON.parse(event.data);
+		switch(data.type){
+			case 'image':
+				var image = data.image;
+				image = [].concat(...image.map(val => [val, val, val, 255])) // Convert to RGB (kinda)
+				setImage('cameraView', image);
+		}
+	}
+
+	var walk_data = {
+		type: 'walk',
 		steering: 0,
 		speed: 0
 	};
@@ -52,12 +63,27 @@ window.onload = function() {
 			steer.refresh(steering);
 
 			var speed = bA.pressed ? 0.2 : 0;
-			if(data.speed != speed || data.steering != steering){
-				data.steering = steering;
-				data.speed = speed;
-				ws.send(JSON.stringify(data));
+			if(walk_data.speed != speed || walk_data.steering != steering){
+				walk_data.steering = steering;
+				walk_data.speed = speed;
+				ws.send(JSON.stringify(walk_data));
 			}
 		}
 	}
 	window.requestAnimationFrame(runLoop);
+
+
+	function getCameraView(){
+		ws.send(JSON.stringify({type: 'shoot'}));
+	}
+
+	function setImage(canvasID, image){
+		var context = document.getElementById(canvasID).getContext('2d');
+		var imageData = context.getImageData(0,0,200,200);
+		imageData.data.forEach((val, index, arr) => arr[index] = image[index]);
+		context.putImageData(imageData, 0,0);
+	}
+
+	setInterval(getCameraView, 1000);
+	//setTimeout(getCameraView, 1000);
 }

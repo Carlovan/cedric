@@ -9,3 +9,15 @@
 	height: 70px;
 	display: inline-block;
 }
+
+#knobs {
+	position: fixed;
+	right: 10px;
+	top: 10px;
+}
+
+#cameraView {
+	border: 1px solid #444;
+	width: 500px;
+	height: 500px;
+}
