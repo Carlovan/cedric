@@ -1,1 +1,1 @@
-sudo nginx -c /home/giulio/cedric/webserver/nginx.conf
+sudo nginx -c /home/giulio/webserver/webserver/nginx.conf
