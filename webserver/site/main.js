@@ -1,3 +1,7 @@
+function ascii(c) {
+	return c.charCodeAt(0);
+}
+
 window.onload = function() {
 	var serverIP = location.host;
 	var ws = new WebSocket(`ws://${serverIP}:8080`);
@@ -6,8 +10,11 @@ window.onload = function() {
 		var data = JSON.parse(event.data);
 		switch(data.type){
 			case 'image':
-				var image = data.image;
-				image = [].concat(...image.map(val => [val, val, val, 255])) // Convert to RGB (kinda)
+				var image = data.image.data;
+				image = [].concat(...image.map(function(val){
+					return [val, val, val, 255];
+				})); // Convert to RGB (kinda)
+				console.log(image[0]);
 				setImage('cameraView', image);
 		}
 	}
@@ -84,6 +91,6 @@ window.onload = function() {
 		context.putImageData(imageData, 0,0);
 	}
 
-	setInterval(getCameraView, 1000);
+	setInterval(getCameraView, 700);
 	//setTimeout(getCameraView, 1000);
 }
