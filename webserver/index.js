@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const zerorpc = require('zerorpc');
 const fs = require('fs');
 
-var rpc_address = 'ipc:///tmp/';
+var rpc_address = 'tcp://127.0.0.1:';
 var motors_port = 22000;
 var camera_port = 22001;
 
@@ -19,16 +19,18 @@ wss.on('connection', function(ws){
 		var data = JSON.parse(msg);
 		if(data.type == 'walk'){
 			process.stdout.write(`${data.steering.toFixed(2)}  \t${data.speed}      \r`);
-			motors_client.invoke('walk', data.speed, data.steering, (error, res, more) => {});
+			motors_client.invoke('walk', data.speed, data.steering, (error, res, more) => {console.log(res)});
 		}
 		else if(data.type == 'shoot'){
 			camera_client.invoke('shoot', (error, res, more) => {
-				fs.readFile(res, function(err, content) {
-					var data = {};
-					data.type = 'image';
-					data.image = content;
-					ws.send(JSON.stringify(data));
-				});
+				if(res && res.length > 0){
+					fs.readFile(res, function(err, content) {
+						var data = {};
+						data.type = 'image';
+						data.image = content;
+						ws.send(JSON.stringify(data));
+					});
+				}
 			});
 		}
 	});
