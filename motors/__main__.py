@@ -11,5 +11,6 @@ GPIO.setup(pin1, GPIO.OUT)
 GPIO.setup(pin2, GPIO.OUT)
 
 server = zerorpc.Server(MotorController(pin1, pin2))
-server.bind('ipc:///tmp/22000')
+server.bind('tcp://127.0.0.1:22000')
+print('Running')
 server.run()
