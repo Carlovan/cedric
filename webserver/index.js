@@ -18,8 +18,7 @@ wss.on('connection', function(ws){
 	ws.on('message', function(msg){
 		var data = JSON.parse(msg);
 		if(data.type == 'walk'){
-			process.stdout.write(`${data.steering.toFixed(2)}  \t${data.speed}      \r`);
-			motors_client.invoke('walk', data.speed, data.steering, (error, res, more) => {console.log(res)});
+			motors_client.invoke('walk', data.speed, data.steering, (error, res, more) => {});
 		}
 		else if(data.type == 'shoot'){
 			camera_client.invoke('shoot', (error, res, more) => {
