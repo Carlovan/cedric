@@ -6,7 +6,7 @@ iterations = 9000
 learning_rate = 1
 norm_rate = 0.0
 
-nn = neuralnet.NeuralNetwork([16,100,4])
+nn = neuralnet.NeuralNetwork([10000,100,7])
 
 try:
 	for i in range(iterations):
@@ -16,6 +16,9 @@ except KeyboardInterrupt:
 	print('Learning interrupted')
 print()
 
+print('Learning done. Saving....')
+np.save('weights.npy', np.array(nn.weights))
+'''
 for val in data.validation:
 	output = nn.feed(val[0])
 	a = [' '.join(str(int(y)) for y in x) for x in val[0].reshape([4,4]).T.tolist()]
@@ -25,3 +28,4 @@ for val in data.validation:
 	a[3] += '\t\t{}\t\t{}'.format(b[1], c[1])
 	print('\n'.join(a))
 	print('-'*40)
+'''

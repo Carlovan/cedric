@@ -1,35 +1,32 @@
+import cv2
 import numpy as np
-import random
+import os
+import re
 
-all_inputs = []
-all_outputs = []
+train_images_dir = '../images/train/'
 
-for q in range(4):
-	X = q%2  * 2
-	Y = q//2 * 2 
-	for n in range(1, 17):
-		c = '{0:0>4}'.format(bin(n)[2:])
-		tmp = np.matrix(np.zeros([4, 4]))
-		for i in range(4):
-			if c[i] == '1':
-				x = i%2
-				y = i//2
-				tmp[X+x, Y+y] = 1
-		all_inputs.append(tmp.flatten().T)
-		tmpo = np.matrix(np.zeros([4,1]))
-		tmpo[q,0] = 1
-		all_outputs.append(tmpo)
-all_ = list(zip(all_inputs,all_outputs))
+inputs = []
+outputs = []
 
-learning = random.sample(all_, 20)
-inputs = [x[0] for x in learning]
-outputs = [x[1] for x in learning]
+def load_image(filename):
+	im = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+	im = cv2.threshold(im, 127, 1, cv2.THRESH_BINARY_INV)[1]
+	return np.matrix(im.flatten()).T
 
-validation = random.sample(all_, 10)
+for f in os.listdir(train_images_dir):
+	m = re.match(r'(\d+)d.png', f)
+	if m is not None:
+		code = int(m.group(1))
+		im = load_image(train_images_dir + f)
+		inputs.append(im)
+		oo = np.zeros((7,1))
+		oo[code * 7 // 18, 0] = 1
+		outputs.append(np.matrix(oo))
 
-extra_inputs = [np.matrix([[0,0,1,1],[0,0,0,0],[1,0,0,0],[0,0,0,0]]).flatten().T]
-extra_outputs = [np.matrix([[0,1],[1,0]]).flatten().T]
-
-validation += list(zip(extra_inputs, extra_outputs))
-val_inputs = [x[0] for x in validation]
-val_outputs = [x[1] for x in validation]
+validation = []
+validate_images_dir = '../images/validate/'
+for f in os.listdir(validate_images_dir):
+	m = re.match(r'(.*)\.png', f)
+	if m is not None:
+		name = m.group(1)
+		validation.append([name, load_image(validate_images_dir + f)])
