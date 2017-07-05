@@ -1,3 +1,4 @@
+import zerorpc
 import numpy as np
 import neuralnet
 
@@ -10,7 +11,8 @@ class NNServer:
 		self.nn.weights = list(np.load(weights_filename))
 
 	def calculateSteering(self, image):
-		inputs = np.matrix(image).T
+		inputs = np.array(bytearray(image), dtype=np.float64)
+		inputs = np.matrix(inputs / 255).T
 		outputs = self.nn.feed(inputs)
 		steering = 0
 		outputs = list(outputs.A.flatten())
@@ -18,4 +20,8 @@ class NNServer:
 			steering += i * outputs[i]
 		steering /= sum(outputs) * len(outputs)
 		return steering * 2 - 1
-			
+
+server = zerorpc.Server(NNServer())
+server.bind('tcp://127.0.0.1:22002')
+print('Running')
+server.run()
