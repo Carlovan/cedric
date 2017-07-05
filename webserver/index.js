@@ -22,12 +22,13 @@ wss.on('connection', function(ws){
 		}
 		else if(data.type == 'shoot'){
 			camera_client.invoke('shoot', (error, res, more) => {
-				if(res && res.length > 0){
+				if(ws.readyState == ws.OPEN && res && res.length > 0){
 					fs.readFile(res, function(err, content) {
 						var data = {};
 						data.type = 'image';
 						data.image = content;
-						ws.send(JSON.stringify(data));
+						if(ws.readyState == ws.OPEN)
+							ws.send(JSON.stringify(data));
 					});
 				}
 			});
