@@ -2,6 +2,8 @@ function ascii(c) {
 	return c.charCodeAt(0);
 }
 
+var gross;
+
 window.onload = function() {
 	var serverIP = location.host;
 	var ws = new WebSocket(`ws://${serverIP}:8080`);
@@ -16,6 +18,10 @@ window.onload = function() {
 				})); // Convert to RGB (kinda)
 				//console.log(image[0]);
 				setImage('cameraView', image);
+				break;
+			case 'nn_steering':
+				setNeuralNetSteering(data.steering);
+				break;
 		}
 	}
 
@@ -77,11 +83,18 @@ window.onload = function() {
 
 	function setImage(canvasID, image){
 		var context = document.getElementById(canvasID).getContext('2d');
-		var imageData = context.getImageData(0,0,200,200);
+		var imageData = context.getImageData(0,0,100,100);
 		imageData.data.forEach((val, index, arr) => arr[index] = image[index]);
 		context.putImageData(imageData, 0,0);
 	}
-
 	setInterval(getCameraView, 700);
 	//setTimeout(getCameraView, 1000);
+
+	function getNeuralNetSteering(){
+		ws.send(JSON.stringify({type: 'nn_steering'}))
+	}
+	function setNeuralNetSteering(value){
+		document.getElementById('nn_steer_indicator').value = value;
+	}
+	setInterval(getNeuralNetSteering, 500);
 }

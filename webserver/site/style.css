@@ -11,7 +11,7 @@ body {
 	padding: 15px;
 }
 
-#steer_indicator {
+input[type=range] {
 	display: inline-block;
 	vertical-align: top;
 	width: 100%;
