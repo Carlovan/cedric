@@ -14,7 +14,7 @@ window.onload = function() {
 				image = [].concat(...image.map(function(val){
 					return [val, val, val, 255];
 				})); // Convert to RGB (kinda)
-				console.log(image[0]);
+				//console.log(image[0]);
 				setImage('cameraView', image);
 		}
 	}
@@ -25,24 +25,13 @@ window.onload = function() {
 		speed: 0
 	};
 
-	var steer = new JustGage({
-		id: 'steer',
-		value: 0,
-		min: -1,
-		max: 1,
-		gaugeColor: '#34495e',
-		levelColors: ['#f39c12'],
-		noGradient: true,
-		hideMinMax: true,
-		hideValue: true,
-		refreshAnimationTime: 0.1
-	});
+	var steer = document.getElementById('steer_indicator');
 	var l_knob = new AnalogStick(document.getElementById('lknob_container'));
 	var r_knob = new AnalogStick(document.getElementById('rknob_container'));
 	var info_div = document.getElementById('info');
 
 	function runLoop(){
-		window.requestAnimationFrame(runLoop);
+		//window.requestAnimationFrame(runLoop);
 
 		var gamepads = navigator.getGamepads();
 
@@ -63,13 +52,14 @@ window.onload = function() {
 			// Calculate the steering value
 			var steering = Math.min(1, Math.max(-1, rX + lX/5 ));
 			steering = Math.round(steering * 100) / 100;
+			//steering *= 0.95;
 
 			l_knob.set_axes(lX, lY);
 			r_knob.set_axes(rX, rY);
 
-			steer.refresh(steering);
+			steer.value = steering;
 
-			var speed = bA.pressed ? 0.2 : 0;
+			var speed = bA.pressed ? 0.1 : 0;
 			if(walk_data.speed != speed || walk_data.steering != steering){
 				walk_data.steering = steering;
 				walk_data.speed = speed;
@@ -77,7 +67,8 @@ window.onload = function() {
 			}
 		}
 	}
-	window.requestAnimationFrame(runLoop);
+	//window.requestAnimationFrame(runLoop);
+	setInterval(runLoop, 10);
 
 
 	function getCameraView(){

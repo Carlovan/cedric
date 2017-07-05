@@ -5,9 +5,11 @@ function AnalogStick(container, color) {
 	this.circle = document.createElement('div');
 	this.circle.style.width = '100%';
 	this.circle.style.height = '100%';
-	this.circle.style.border = '1px solid #444';
+	//this.circle.style.border = '1px solid #444';
 	this.circle.style.borderRadius = '50%';
 	this.circle.style.position = 'relative';
+	this.circle.style.background = 'radial-gradient(ellipse at center, #2980b9 0%, rgba(0,0,0,0) 110%)';
+	this.circle.style.boxShadow = '5px 10px 10px 0px rgba(21, 108, 165, 0.3)';
 	container.appendChild(this.circle);
 
 	this.indicator = document.createElement('div');

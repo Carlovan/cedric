@@ -3,6 +3,7 @@
 	<head>
 		<title>Cedric Controller</title>
 		<link rel='stylesheet' href='style.css'>
+		<link rel='stylesheet' href='sliders.css'>
 		<script src='raphael-2.1.4.min.js'></script>
 		<script src='justgage.js'></script>
 		<script src='analogstick.js'></script>
@@ -11,10 +12,17 @@
 	<body>
 		<canvas id='cameraView' width='200' height='200'></canvas>
 		<div id='info'></div>
-		<div id='knobs'>
-			<div id='lknob_container' class='knob'></div>
-			<div id='rknob_container' class='knob'></div>
+		<div id='controls'>
+			<fieldset id='knobs'>
+				<legend>Analogici</legend>
+				<div id='lknob_container' class='knob'></div>
+				<div id='rknob_container' class='knob'></div>
+			</fieldset>
+			<br />
+			<fieldset>
+				<legend>Sterzo</legend>
+				<input type='range' disabled=true id='steer_indicator' min='-1' max='1' step='0.01'>
+			</fieldset>
 		</div>
-		<div id='steer'></div>
 	</body>
 </html>
