@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+import pigpio
 
 def scale(value, oldL, oldR, newL, newR):
 	return (value - oldL) / (oldR - oldL) * (newR -  newL) + newL
@@ -9,21 +9,12 @@ class Motor:
 		# Class constructor
 		# Offset is used to calibrate the motor
 
-		# Make sure the pin is in output mode
-		GPIO.cleanup(pin)
-		GPIO.setup(pin, GPIO.OUT)
-
 		if rev == True:
 			self._mult = -1
 
 		self.pin = pin
 		self.offset = offset
-		self.pwmHandler = GPIO.PWM(pin, 50)
-		self.pwmHandler.start(0)
-
-	def __del__(self):
-		# Class destructor
-		self.pwmHandler.stop()
+		self.gpio = pigpio.pi()
 
 	def set_speed(self, speed):
 		# Sets the speed of the motor.
@@ -32,5 +23,5 @@ class Motor:
 		speed *= self._mult
 		speed += self.offset
 		#dc = scale(speed, -1, 1, 4.7954, 9.7954)
-		dc = scale(speed, -1, 1, 5, 10)
-		self.pwmHandler.ChangeDutyCycle(dc)
+		dc = scale(speed, -1, 1, 1000, 2000)
+		self.gpio.set_servo_pulsewidth(self.pin, dc)
